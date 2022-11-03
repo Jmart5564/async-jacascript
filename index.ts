@@ -21,7 +21,7 @@ import {
   type Food,
   gobbleFood,
   kittyCrunch,
-  cook,
+  cook
 } from './kitchen'
 
 /**
@@ -59,7 +59,7 @@ const tap1 = <A>(f: (a: A) => void): (a: A) => A => {
  * work.
  */
 export const eatFood = (foods: ReadonlyArray<Food>): Promise<Belly> => {
-  return Promise.resolve({nutrients: 0})
+  return Promise.resolve({ nutrients: 0 })
 }
 
 /**
@@ -67,6 +67,12 @@ export const eatFood = (foods: ReadonlyArray<Food>): Promise<Belly> => {
  * work.
  */
 export const properCook = (): Promise<ReadonlyArray<Food>> => {
+  // get food from kitty crunch
+  // ReadonlyArray<Food>
+  // cook: takes a Food and returns a promise of Food
+  // Promise.all takes an array of promises of x and returns a promise of arrays x
+  // Promise.all: Array<Promise<x>> returns => Promise<Array<x>>
+  // Promise<ReadonlyArray<Food>>
   return Promise.resolve([])
 }
 
@@ -81,7 +87,7 @@ export const incompleteCook = async (): Promise<ReadonlyArray<Food>> => {
 
 export const slowCook = async (): Promise<ReadonlyArray<Food>> => {
   const foods = []
-  for(let food of kittyCrunch) {
+  for (const food of kittyCrunch) {
     const cookedFood = await cook(food)
     console.log('cooked food', cookedFood)
     foods.push(cookedFood)
@@ -95,7 +101,7 @@ export const slowCook = async (): Promise<ReadonlyArray<Food>> => {
 // the program to determine if this is the file we're running, or if it's
 // included via some other mechanism (such as our tests). We don't want to run
 // the main function on import.
-if(path.basename(__filename) == process.argv[0]) {
+if (path.basename(__filename) == process.argv[0]) {
   properCook()
     .then(eatFood)
     .then(tap1(() => console.log('All done!')))
