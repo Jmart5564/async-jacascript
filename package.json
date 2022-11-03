@@ -1,0 +1,29 @@
+{
+  "name": "adv-fullstack-async-javascript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "ts-node --esm index.ts",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alchemycodelab/adv-fullstack-async-javascript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alchemycodelab/adv-fullstack-async-javascript/issues"
+  },
+  "homepage": "https://github.com/alchemycodelab/adv-fullstack-async-javascript#readme",
+  "devDependencies": {
+    "@types/jest": "29.2.1",
+    "@types/node": "18.11.7",
+    "jest": "29.2.2",
+    "ts-jest": "29.0.3",
+    "ts-node": "10.9.1",
+    "typescript": "4.8.4"
+  }
+}
