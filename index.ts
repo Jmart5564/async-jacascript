@@ -68,12 +68,15 @@ export const eatFood = (foods: ReadonlyArray<Food>): Promise<Belly> => {
  */
 export const properCook = (): Promise<ReadonlyArray<Food>> => {
   // get food from kitty crunch
+  const result = kittyCrunch.map((food: Food): Promise<Food> => cook(food))
   // ReadonlyArray<Food>
   // cook: takes a Food and returns a promise of Food
   // Promise.all takes an array of promises of x and returns a promise of arrays x
   // Promise.all: Array<Promise<x>> returns => Promise<Array<x>>
+  // Promise.all waits for all promises to complete and collates them as a return
+  // Array.prototype.map (f, xs) => ys f:(A => B)
   // Promise<ReadonlyArray<Food>>
-  return Promise.resolve([])
+  return Promise.all(result)
 }
 
 export const incompleteCook = async (): Promise<ReadonlyArray<Food>> => {
@@ -101,7 +104,7 @@ export const slowCook = async (): Promise<ReadonlyArray<Food>> => {
 // the program to determine if this is the file we're running, or if it's
 // included via some other mechanism (such as our tests). We don't want to run
 // the main function on import.
-if (path.basename(__filename) == process.argv[0]) {
+if (path.basename(__filename) === process.argv[0]) {
   properCook()
     .then(eatFood)
     .then(tap1(() => console.log('All done!')))
