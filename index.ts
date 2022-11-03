@@ -58,8 +58,27 @@ const tap1 = <A>(f: (a: A) => void): (a: A) => A => {
  * This is one of the functions you'll need to implement to make your tests
  * work.
  */
+
+//  const sequence = (strings: Array<string>): Promise<string> => {
+//   return strings.reduce(
+//     (acc: Promise<string>, s: string) => {
+//       return acc.then(accString => {
+//         return accString + ' ' + s
+//       })
+//     },
+//     Promise.resolve('start')
+//   )
+// }
+
+// sequence(['foo', 'bar', 'baz'])
+//   .then(allTogether => console.log(allTogether))
+
 export const eatFood = (foods: ReadonlyArray<Food>): Promise<Belly> => {
-  return Promise.resolve({ nutrients: 0 })
+  return foods.reduce(
+    (belly : Promise<Belly>, food: Food) => {
+      return belly.then(foodBelly => gobbleFood(food, foodBelly))
+    }, Promise.resolve({ nutrients: 0 })
+  )
 }
 
 /**
