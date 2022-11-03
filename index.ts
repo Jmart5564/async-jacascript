@@ -21,7 +21,7 @@ import {
   type Food,
   gobbleFood,
   kittyCrunch,
-  cook,
+  cook
 } from './kitchen'
 
 /**
@@ -58,8 +58,27 @@ const tap1 = <A>(f: (a: A) => void): (a: A) => A => {
  * This is one of the functions you'll need to implement to make your tests
  * work.
  */
+
+//  const sequence = (strings: Array<string>): Promise<string> => {
+//   return strings.reduce(
+//     (acc: Promise<string>, s: string) => {
+//       return acc.then(accString => {
+//         return accString + ' ' + s
+//       })
+//     },
+//     Promise.resolve('start')
+//   )
+// }
+
+// sequence(['foo', 'bar', 'baz'])
+//   .then(allTogether => console.log(allTogether))
+
 export const eatFood = (foods: ReadonlyArray<Food>): Promise<Belly> => {
-  return Promise.resolve({nutrients: 0})
+  return foods.reduce(
+    (belly : Promise<Belly>, food: Food) => {
+      return belly.then(foodBelly => gobbleFood(food, foodBelly))
+    }, Promise.resolve({ nutrients: 0 })
+  )
 }
 
 /**
@@ -67,7 +86,16 @@ export const eatFood = (foods: ReadonlyArray<Food>): Promise<Belly> => {
  * work.
  */
 export const properCook = (): Promise<ReadonlyArray<Food>> => {
-  return Promise.resolve([])
+  // get food from kitty crunch
+  const result = kittyCrunch.map((food: Food): Promise<Food> => cook(food))
+  // ReadonlyArray<Food>
+  // cook: takes a Food and returns a promise of Food
+  // Promise.all takes an array of promises of x and returns a promise of arrays x
+  // Promise.all: Array<Promise<x>> returns => Promise<Array<x>>
+  // Promise.all waits for all promises to complete and collates them as a return
+  // Array.prototype.map (f, xs) => ys f:(A => B)
+  // Promise<ReadonlyArray<Food>>
+  return Promise.all(result)
 }
 
 export const incompleteCook = async (): Promise<ReadonlyArray<Food>> => {
@@ -81,7 +109,7 @@ export const incompleteCook = async (): Promise<ReadonlyArray<Food>> => {
 
 export const slowCook = async (): Promise<ReadonlyArray<Food>> => {
   const foods = []
-  for(let food of kittyCrunch) {
+  for (const food of kittyCrunch) {
     const cookedFood = await cook(food)
     console.log('cooked food', cookedFood)
     foods.push(cookedFood)
@@ -95,7 +123,7 @@ export const slowCook = async (): Promise<ReadonlyArray<Food>> => {
 // the program to determine if this is the file we're running, or if it's
 // included via some other mechanism (such as our tests). We don't want to run
 // the main function on import.
-if(path.basename(__filename) == process.argv[0]) {
+if (path.basename(__filename) === process.argv[0]) {
   properCook()
     .then(eatFood)
     .then(tap1(() => console.log('All done!')))
